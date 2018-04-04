@@ -34,6 +34,10 @@ bigquery data owner
 bigquery job user
 storage object admin
 ```
+download the json file and save in #{AIRFLOW_JSON_PATH}
+
+## create persistent disk named postgres-data with 10gb
+The persistent disk will be used by postgresql database.
 
 ## Build
 
@@ -42,10 +46,10 @@ storage object admin
         export PROJECT_ID=xxxxx
         # Set the version of airflow dags to replace KUBE_AIRFLOW_VERSION in Makefile
         cd ../ && export VERSION="$(TZ=Asia/Tokyo date +%Y%m%dt%H%M%S)-$(git rev-parse --short HEAD)" && echo $VERSION && cd -
-        GCP_JSON_PATH=~/Documents/Archive/GCPProjectID-c06dcd1e8e67-airflow.json make apply
+        GCP_JSON_PATH=#{AIRFLOW_JSON_PATH} make apply
         
         or 
-        GCP_JSON_PATH=~/Documents/Archive/GCPProjectID-c06dcd1e8e67-airflow.json make publish
+        GCP_JSON_PATH=#{AIRFLOW_JSON_PATH} make publish
         make rolling-update
 
 **apply** task depends on **publish** task which depend on **build** task
@@ -63,8 +67,8 @@ Create all the deployments and services to run Airflow on Kubernetse:
        make create # first deployment
        make deploy #update
        
-       make list-pods
        make list-services
+       make list-pods
        pod_name="web-2874099158-lxgm2" make pod-login
        
 It will create deployments for:
@@ -118,7 +122,8 @@ For now, update the value for the `replicas` field of the deployment you want to
 
 # connect to the cluster
 ```bash
-gcloud container clusters get-credentials airflow-cluster --zone us-central1-a --project spinappadjust
+gcloud container clusters get-credentials airflow-cluster --zone us-central1-a --project #{GCP_PROJECT_ID}
+
 kubectl proxy
 ```
 
