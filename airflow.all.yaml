@@ -42,11 +42,6 @@ spec:
   - 10.0.0.0/8
   # home ip for temp
   - 59.166.216.164/32
-  # opt ips
-  - 202.32.143.99/32
-  - 124.32.244.99/32
-  - 124.39.122.115/32
-  - 39.110.206.88/32
   selector:
     app: airflow
     tier: web
@@ -101,7 +96,7 @@ spec:
     spec:
       containers:
       - name: postgres
-        image: postgres
+        image: postgres:10.3
         ports:
         - name: postgres
           containerPort: 5432
